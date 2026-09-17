@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Ventas - Atlas Corporation</title>
+    <style>
+        :root { --bg-dark: #0f172a; --box-light: #ffffff; --text-main: #1e293b; --primary-btn: #2563eb; --border-color: #cbd5e1; }
+        body { font-family: sans-serif; background-color: var(--bg-dark); margin: 0; color: var(--text-main); min-height: 100vh; padding: 2rem; }
+        .container { background-color: var(--box-light); padding: 2rem; border-radius: 10px; max-width: 1000px; margin: 0 auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .toolbar { margin-bottom: 2rem; }
+        .btn-volver { padding: 0.8rem 1.5rem; background-color: var(--primary-btn); color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border-color); }
+        th { background-color: #f1f5f9; text-transform: uppercase; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="toolbar">
+            <a href="panel_ventas.html" class="btn-volver">Regresar a Ventas</a>
+        </div>
+        <h1>Historial de Ventas Realizadas</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Folio</th>
+                    <th>Fecha</th>
+                    <th>Artículos</th>
+                    <th>Cajero</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody id="lista-ventas">
+                </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tbody = document.getElementById('lista-ventas');
+            const ventas = JSON.parse(sessionStorage.getItem('historialVentas')) || [];
+
+            if (ventas.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No hay ventas registradas en esta sesión.</td></tr>';
+            } else {
+                ventas.forEach(v => {
+                    tbody.insertAdjacentHTML('beforeend', `
+                        <tr>
+                            <td><strong>${v.folio}</strong></td>
+                            <td>${v.fecha}</td>
+                            <td>${v.articulos} items</td>
+                            <td>${v.cajero}</td>
+                            <td><strong>$${parseFloat(v.total).toFixed(2)}</strong></td>
+                        </tr>
+                    `);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
